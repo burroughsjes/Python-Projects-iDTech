@@ -1,11 +1,12 @@
 import random
 
-playAgain = True
+playAgain = "yes"
 
-while playAgain == True:
-    opt = ["It is certain.", "Don't count on it.", "As I see it, yes.", "Reply hazy, try again.", "My reply is no.", "Without a doubt.", "Ask again later.", "Yes-definitely.", "Concentrate and ask again.", "My sources say no.",]
+while (playAgain == "yes"):
+    # choices the magic 8 ball could choose
+    opt = ["It is certain.", "Don't count on it.", "As I see it, yes.", "Reply hazy, try again.", "My reply is no.", "Without a doubt.", "Ask again later.", "Yes-definitely.", "Concentrate and ask again.", "My sources say no."]
                 
-    ansNum = random.randint(0, 8)
+    ansNum = random.randint(0, len(opt) - 1)
 
     ans = opt[ansNum]
 
@@ -14,6 +15,3 @@ while playAgain == True:
     print("\n" + ans)
 
     again = input("\nDo you want to play again?\n").lower()
-
-    if again == "no":
-        playAgain = False

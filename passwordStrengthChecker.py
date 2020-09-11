@@ -1,13 +1,8 @@
 import re
 
-def hasNumbers(inputString):
-    return any(char.isdigit() for char in inputString)
-
+# returns true if entire string is numbers
 def hasAllNumbers(inputString):
-    return all(char.isdigit() for char in inputString)
-
-def intro():
-  print("Welcome to the Password Strength Checker!\n\n")
+    return all(char.isdigit() for char in inputString) 
 
 def tableAdditions():
     table = [["Length", length, "+ " + str(lengthBonus)],
@@ -24,9 +19,6 @@ def tableDeductions():
              ["Sequential Letters", sLetters, "- " + str(sLettersPoints)],
              ["Sequential Numbers", sNumbers, "- " + str(sNumbersPoints)],]
     return table2
-
-
-intro()
 
 number = 0
 uppercase = 0
@@ -47,70 +39,71 @@ numberBonus = 0
 lengthBonus = 0
 lowercaseBonus = 0
 symbolBonus = 0
-f = 0
 count = 0
-playAgain = True
+playAgain = "yes"
 
-while playAgain == True: 
+print("Welcome to the Password Strength Checker!\n\n")
+
+while (playAgain == "yes"): 
 
     password = input("Enter your password: ")
-    lengthBonus = len(password) * 4
-
     length = len(password)
+    lengthBonus = length * 4
 
-    if password.isalpha() == True:
+    # gives points if entire String is letters
+    if (password.isalpha()):
         lettersOnly = length
         lettersOnlyPoints = length
         
-    if hasAllNumbers(password) == True:
+    # gives points if entire String is numbers
+    if (hasAllNumbers(password)):
         numbersOnly = length
         numbersOnlyPoints = length
 
+    # counts number of characters that repeats often
+    frequencies = {}
     for i in password:
-        c = 0
-        f += 1
-        for j in password:
-            c += 1
-            if i == j and f!= c:
-                repeat += 1
-                break
+        if (i in frequencies):
+            frequencies[i] += 1
+        else:
+            frequencies[i] = 0
+    repeat = len([freq for freq in frequencies.values() if freq > 3])
     repeatPoints = 5 * repeat
 
-    for x in range(1, len(password)):
-        if password[x].lower() >= chr(97) and password[x].lower() <= chr(122):
-            if ord(password[x].lower()) == ord(password[x - 1].lower()) + 1:
+    # assigns points based on if the letters and numbers are in consecutive order or not
+    for x in range(1, length):
+        # dealing with letters
+        if (password[x].lower() >= chr(97) and password[x].lower() <= chr(122)):
+            if (ord(password[x].lower()) == ord(password[x - 1].lower()) + 1):
                 sLetters += 1
-        if password[x].lower() >= chr(48) and password[x].lower() <= chr(57):
-            if ord(password[x]) == ord(password[x - 1]) + 1: 
+        # dealing with numbers
+        if (password[x].lower() >= chr(48) and password[x].lower() <= chr(57)):
+            if (ord(password[x]) == ord(password[x - 1]) + 1): 
                 sNumbers += 1
-
 
     sLettersPoints = sLetters * 3
     sNumbersPoints = sNumbers * 3       
         
+    # adding bonuses to the score
     for x in password:
-        if hasNumbers(x) == True:
+        if (x.isdigit()):
             number += 1
             numberBonus = number * 4
-        if x >= chr(65) and x <= chr(90):
+        if (x >= chr(65) and x <= chr(90)):
             uppercase += 1
             uppercaseBonus = (len(password) - uppercase) * 2
-        if x >= chr(97) and x <= chr(122):
+        if (x >= chr(97) and x <= chr(122)):
             lowercase += 1
             lowercaseBonus = (len(password) - lowercase) * 2
-        if x >= chr(33) and x <= chr(47) or x >= chr(58) and x <= chr(64) or x >= chr(91) and x <= chr(96) or x >= chr(123) and x <= chr(126):
+        if (x >= chr(33) and x <= chr(47) or x >= chr(58) and x <= chr(64) or x >= chr(91) and x <= chr(96) or x >= chr(123) and x <= chr(126)):
             symbol += 1
             symbolBonus = symbol * 6
         
-        
-
     print("\n\n: Additions            :  Count  :  Points  :")
     print("————————————————————————————————————————————")
 
     for item in tableAdditions():
         print(":", item[0], " "*(19 - len(item[0])), ":", item[1], " "*(6-len(str(item[1]))), ":", item[2], " "*(7-len(item[2])), ":")
-
-
 
     print("\n\n: Deductions           :  Count  :  Points  :")
     print("————————————————————————————————————————————")
@@ -118,7 +111,7 @@ while playAgain == True:
     for item in tableDeductions():
         print(":", item[0], " "*(19 - len(item[0])), ":", item[1], " "*(6-len(str(item[1]))), ":", item[2], " "*(7-len(item[2])), ":")
 
-
+    # calculating final score
     score = lengthBonus + uppercaseBonus + lowercaseBonus + numberBonus + symbolBonus - lettersOnlyPoints - numbersOnlyPoints - sLettersPoints - sNumbersPoints - repeatPoints
     print("\n\nScore:", str(score))
 
@@ -137,12 +130,6 @@ while playAgain == True:
     elif score > 120:
         print("Strength: Extremely Unbreakably Strong")
 
-    again = input("\n\nDo you want to try another password?\n").lower()
-
-    if again == "no":
-        playAgain = False
-    else:
-        print("\n\n")
-    
+    again = input("\n\nDo you want to try another password?\n\n\n").lower()
 
 
